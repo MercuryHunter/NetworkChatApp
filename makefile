@@ -8,7 +8,9 @@ JFLAGS = -g -d $(BINDIR) -cp $(BINDIR)
 
 IP=127.0.0.1
 NAME=DefaultName
-PORT= 1050
+PORT=1050
+MAXCLIENTS=10
+MAXROOMS=10
 
 OBJECTS=Connector.class ConnectedClient.class MessageHandler.class Server.class \
 		Receiver.class Sender.class Client.class
@@ -30,7 +32,7 @@ Connector.class: Connector.java
 	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java
 
 run_server: all
-	@java -cp $(BINDIR) server.Server $(PORT) 10 10
+	@java -cp $(BINDIR) server.Server $(PORT) $(MAXCLIENTS) $(MAXROOMS)
 
 run_client: all
 	@java -cp $(BINDIR) client.Client $(IP) $(PORT) $(NAME) 
