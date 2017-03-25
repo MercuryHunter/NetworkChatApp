@@ -6,13 +6,11 @@ import java.io.*;
 public class Connector implements Runnable {
 
 	ServerSocket server;
-	Server mainServer;
 
 	public Connector(int portNum) {
 		try {
 			// Start a socket for incoming connections
 			server = new ServerSocket(portNum);
-			mainServer = new Server();
 		}
 		catch(IOException e) {
 			System.out.println("Error listening on port: " + portNum);
@@ -25,13 +23,17 @@ public class Connector implements Runnable {
 	public void run() {
 		try {
 			while(true) {
-				if(mainServer.clients.size() >= mainServer.maxClients) {
+				// TODO: Blocking when messages happen.
+				if(Server.clients.size() >= Server.maxClients) {
 					Thread.sleep(3000);
 					continue;
 				}
 				Socket clientSocket = server.accept();
 				System.out.println("Client connected");
 
+				ConnectedClient newClient = new ConnectedClient(clientSocket);
+				Server.clients.add(newClient);
+				new Thread(newClient).start();
 			}
 		}
 		catch (IOException e) {
