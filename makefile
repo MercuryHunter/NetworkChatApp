@@ -19,7 +19,7 @@ vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
 vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
 
 # define general build rule for java sources
-.SUFFIXES:  .java  .class
+.SUFFIXES: .java  .class
 
 .java.class:
 	@$(JAVAC)  $(JFLAGS)  $<
@@ -32,9 +32,11 @@ Connector.class: Connector.java
 	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java
 
 run_server: all
+	@echo "Variables: PORT MAXCLIENTS MAXROOMS"
 	@java -cp $(BINDIR) server.Server $(PORT) $(MAXCLIENTS) $(MAXROOMS)
 
 run_client: all
+	@echo "Variables: IP PORT NAME"
 	@java -cp $(BINDIR) client.Client $(IP) $(PORT) $(NAME) 
 				
 clean:
