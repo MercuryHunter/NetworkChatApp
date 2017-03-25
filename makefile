@@ -6,7 +6,7 @@ BINDIR = bin
 JAVAC = javac
 JFLAGS = -g -d $(BINDIR) -cp $(BINDIR)
 
-OBJECTS=
+OBJECTS=Connector.class Server.class Client.class
 
 vpath %.java $(SRCDIR)
 vpath %.class $(BINDIR)
@@ -15,16 +15,16 @@ vpath %.class $(BINDIR)
 .SUFFIXES:  .java  .class
 
 .java.class:
-	$(JAVAC)  $(JFLAGS)  $<
+	@$(JAVAC)  $(JFLAGS)  $<
 
 #default rule - will be invoked by make
 all: $(OBJECTS)
 
 run_server: all
-	java -cp $(BINDIR) SERVER ARGS
+	@java -cp $(BINDIR) Server 1050 10
 
 run_client: all
-	java -cp $(BINDIR) CLIENT ARGS
+	@java -cp $(BINDIR) Client
 				
 clean:
 	@rm -f $(BINDIR)/*.class
