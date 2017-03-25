@@ -21,7 +21,7 @@ vpath %.class $(BINDIR)
 all: $(OBJECTS)
 
 run_server: all
-	@java -cp $(BINDIR) Server 1050 10
+	@java -cp $(BINDIR) Server 1050 10 10
 
 run_client: all
 	@java -cp $(BINDIR) Client
