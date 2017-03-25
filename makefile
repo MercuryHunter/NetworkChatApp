@@ -6,11 +6,11 @@ BINDIR = bin
 JAVAC = javac
 JFLAGS = -g -d $(BINDIR) -cp $(BINDIR)
 
-IP=127.0.0.1
-NAME=DefaultName
-PORT=1050
-MAXCLIENTS=10
-MAXROOMS=10
+IP = 127.0.0.1
+NAME = DefaultName
+PORT = 1050
+MAXCLIENTS = 10
+MAXROOMS = 10
 
 OBJECTS=Connector.class ConnectedClient.class MessageHandler.class Server.class \
 		Receiver.class Sender.class Client.class
