@@ -6,10 +6,13 @@ BINDIR = bin
 JAVAC = javac
 JFLAGS = -g -d $(BINDIR) -cp $(BINDIR)
 
-OBJECTS=Connector.class Server.class Client.class
+IP=127.0.0.1
+NAME=DefaultName
 
-vpath %.java $(SRCDIR)
-vpath %.class $(BINDIR)
+OBJECTS=Connector.class ConnectedClient.class MessageHandler.class Server.class Receiver.class Client.class
+
+vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
+vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
 
 # define general build rule for java sources
 .SUFFIXES:  .java  .class
@@ -20,11 +23,15 @@ vpath %.class $(BINDIR)
 #default rule - will be invoked by make
 all: $(OBJECTS)
 
+Connector.class:
+	@rm -rf $(BINDIR)/server/Server.class $(BINDIR)/server/Connector.class $(BINDIR)/server/ConnectedClient.class
+	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java
+
 run_server: all
-	@java -cp $(BINDIR) Server 1050 10 10
+	@java -cp $(BINDIR)/server server.Server 1050 10 10
 
 run_client: all
-	@java -cp $(BINDIR) Client
+	@java -cp $(BINDIR)/client client.Client $(IP) 1050 $(NAME) 
 				
 clean:
 	@rm -f $(BINDIR)/*.class

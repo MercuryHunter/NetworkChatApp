@@ -1,3 +1,5 @@
+package server;
+
 class ConnectedClient implements Runnable {
 
 	public ConnectedClient() {

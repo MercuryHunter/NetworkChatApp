@@ -1,3 +1,5 @@
+package server;
+
 class MessageHandler implements Runnable {
 
 	public MessageHandler() {
