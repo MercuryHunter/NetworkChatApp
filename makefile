@@ -8,8 +8,10 @@ JFLAGS = -g -d $(BINDIR) -cp $(BINDIR)
 
 IP=127.0.0.1
 NAME=DefaultName
+PORT= 1050
 
-OBJECTS=Connector.class ConnectedClient.class MessageHandler.class Server.class Receiver.class Client.class
+OBJECTS=Connector.class ConnectedClient.class MessageHandler.class Server.class \
+		Receiver.class Sender.class Client.class
 
 vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
 vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
@@ -23,15 +25,16 @@ vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
 #default rule - will be invoked by make
 all: $(OBJECTS)
 
-Connector.class:
+Connector.class: Connector.java
 	@rm -rf $(BINDIR)/server/Server.class $(BINDIR)/server/Connector.class $(BINDIR)/server/ConnectedClient.class
 	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java
 
 run_server: all
-	@java -cp $(BINDIR) server.Server 1050 10 10
+	@java -cp $(BINDIR) server.Server $(PORT) 10 10
 
 run_client: all
-	@java -cp $(BINDIR) client.Client $(IP) 1050 $(NAME) 
+	@java -cp $(BINDIR) client.Client $(IP) $(PORT) $(NAME) 
 				
 clean:
 	@rm -f $(BINDIR)/*.class
+	@rm -f $(BINDIR)/*/*.class

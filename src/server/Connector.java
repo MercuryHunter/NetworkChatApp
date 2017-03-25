@@ -30,6 +30,7 @@ public class Connector implements Runnable {
 					continue;
 				}
 				Socket clientSocket = server.accept();
+				System.out.println("Client connected");
 
 			}
 		}
