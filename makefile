@@ -19,10 +19,10 @@ vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
 vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
 
 # define general build rule for java sources
-.SUFFIXES: .java  .class
+.SUFFIXES: .java .class
 
 .java.class:
-	@$(JAVAC)  $(JFLAGS)  $<
+	@$(JAVAC) $(JFLAGS) $<
 
 #default rule - will be invoked by make
 all: $(OBJECTS)
