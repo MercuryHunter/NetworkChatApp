@@ -5,17 +5,26 @@ import java.io.*;
 
 public class Client {
 
-	String name;
+	private String name;
+	private Sender sender;
+	private Receiver receiver;
 
 	private void startClient(String host, int portNum, String client_name) {
 		this.name = client_name;
 
 		try {
 			Socket mySocket = new Socket(host, portNum);
-			PrintWriter outSocket = new PrintWriter(mySocket.getOutputStream(), true);
-			BufferedReader inSocket = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+			System.out.println("Connected");
 			
+			// Start threads for sending and receiving
+			sender = new Sender(new PrintWriter(mySocket.getOutputStream(), true), client_name);
+			receiver = new Receiver(new BufferedReader(new InputStreamReader(mySocket.getInputStream())));
+			
+			Thread sendThread = new Thread(sender);
+			Thread receiverThread = new Thread(receiver);
 
+			sendThread.start();
+			receiverThread.start();
 		}
 		catch(UnknownHostException e) {
 			System.err.println("Unable to see host: " + host);
