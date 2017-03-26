@@ -12,7 +12,8 @@ PORT = 1050
 MAXCLIENTS = 10
 MAXROOMS = 10
 
-OBJECTS=Connector.class ConnectedClient.class MessageHandler.class Server.class \
+OBJECTS=ConnectedClient.class Connector.class \
+		RoomHandler.class Room.class Server.class \
 		Receiver.class Sender.class Client.class
 
 vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
@@ -27,9 +28,10 @@ vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
 #default rule - will be invoked by make
 all: $(OBJECTS)
 
-Connector.class: Connector.java
-	@rm -rf $(BINDIR)/server/Server.class $(BINDIR)/server/Connector.class $(BINDIR)/server/ConnectedClient.class
-	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java
+# Massive dependency cluster
+ConnectedClient.class: ConnectedClient.java
+	@rm -rf $(BINDIR)/server/Server.class $(BINDIR)/server/Connector.class $(BINDIR)/server/ConnectedClient.class $(BINDIR)/server/RoomHandler.class $(BINDIR)/server/Room.class
+	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java $(SRCDIR)/server/RoomHandler.java $(SRCDIR)/server/Room.java
 
 run_server: all
 	@echo "Variables: PORT MAXCLIENTS MAXROOMS"

@@ -11,12 +11,14 @@ public class Server {
 	static ArrayList<ConnectedClient> clients;
 	static int maxClients;
 	private Thread connectorThread;
+	static RoomHandler roomHandler;
 
 	private void startServer(int portNum, int maxClients, int maxRooms) {
 		this.maxClients = maxClients;
 		clients = new ArrayList<ConnectedClient>(maxClients);
 
-		// TODO: Create default room
+		// Create default room and room handler
+		roomHandler = new RoomHandler(maxRooms);
 
 		// Begin connecting clients
 		connectorThread = new Thread(new Connector(portNum));
