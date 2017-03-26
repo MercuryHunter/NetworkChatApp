@@ -30,7 +30,7 @@ class ConnectedClient implements Runnable {
 			// TODO: Parse input, deal with commands and send messages
 			String input;
 			while((input = receive.readLine()) != null) {
-				System.out.println(input);
+				room.sendMessage(input, this);
 			}
 		}
 		catch(Exception x) {
