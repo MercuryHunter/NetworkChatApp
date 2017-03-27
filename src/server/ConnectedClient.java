@@ -27,14 +27,47 @@ class ConnectedClient implements Runnable {
 
 	public void run() {
 		try {
-			// TODO: Parse input, deal with commands and send messages
 			String input;
 			while((input = receive.readLine()) != null) {
-				room.sendMessage(input, this);
+				if(input.charAt(0) == '/') {
+					String[] commandArgs = input.substring(1, input.length()).split(" ");
+					handleCommand(commandArgs);
+				}
+				else room.sendMessage(input, this);
 			}
 		}
 		catch(Exception x) {
 			x.printStackTrace();
+		}
+	}
+
+	private void handleCommand(String[] args) {
+		// TODO: Command Handling
+		String baseCommand = args[0].toLowerCase();
+		switch(baseCommand) {
+			case "list":
+				sendMessage("Command still bring developed");
+				break;
+			case "help":
+				sendMessage("Commands include list, help, send, changechannel, disconnect, download, createchannel\nExperiment with them!");
+				break;
+			case "send":
+				sendMessage("Command still bring developed");
+				break;
+			case "changechannel":
+				sendMessage("Command still bring developed");
+				break;
+			case "disconnect":
+				sendMessage("Command still bring developed");
+				break;
+			case "download":
+				sendMessage("Command still bring developed");
+				break;
+			case "createchannel":
+				sendMessage("Command still bring developed");
+				break;
+			default:
+				sendMessage("Command not understood");
 		}
 	}
 
