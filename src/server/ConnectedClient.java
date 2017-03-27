@@ -46,25 +46,25 @@ class ConnectedClient implements Runnable {
 		String baseCommand = args[0].toLowerCase();
 		switch(baseCommand) {
 			case "list":
-				sendMessage("Command still bring developed");
+				sendMessage("Command still being developed");
 				break;
 			case "help":
 				sendMessage("Commands include list, help, send, changechannel, disconnect, download, createchannel\nExperiment with them!");
 				break;
 			case "send":
-				sendMessage("Command still bring developed");
+				sendMessage("Command still being developed");
 				break;
 			case "changechannel":
-				sendMessage("Command still bring developed");
+				sendMessage("Command still being developed");
 				break;
 			case "disconnect":
-				sendMessage("Command still bring developed");
+				sendMessage("Command still being developed");
 				break;
 			case "download":
-				sendMessage("Command still bring developed");
+				sendMessage("Command still being developed");
 				break;
 			case "createchannel":
-				sendMessage("Command still bring developed");
+				sendMessage("Command still being developed");
 				break;
 			default:
 				sendMessage("Command not understood");
