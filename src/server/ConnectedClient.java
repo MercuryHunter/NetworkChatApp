@@ -90,6 +90,14 @@ class ConnectedClient implements Runnable {
 	}
 
 	private void createRoom(String[] args) {
+		if(args.length != 2) {
+			sendMessage("Please provide a room name and no other arguments to the function.");
+			return;
+		}
+		// TODO: Check name for validity
+		boolean roomCreated = Server.roomHandler.createRoom(args[1]);
+		if(roomCreated) sendMessage("Room created successfully!");
+		else sendMessage("Could not create the room.");
 	}
 
 	private void changeRoom() {
