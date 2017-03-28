@@ -54,17 +54,17 @@ class ConnectedClient implements Runnable {
 			case "send":
 				sendMessage("Command still being developed");
 				break;
-			case "changeroom":
-				changeRoom(args);
-				break;
-			case "disconnect":
-				sendMessage("Command still being developed");
-				break;
 			case "download":
 				sendMessage("Command still being developed");
 				break;
 			case "createroom":
 				createRoom(args);
+				break;
+			case "changeroom":
+				changeRoom(args);
+				break;
+			case "disconnect":
+				sendMessage("Command still being developed");
 				break;
 			default:
 				sendMessage("Command not understood");

@@ -18,7 +18,7 @@ class Room {
 
 	public Room join(ConnectedClient client) {
 		clients.add(client);
-		System.out.println("Client: " + client.ID + " joined room: " + name);
+		System.out.println("Client " + client.ID + " joined room: " + name);
 		return this;
 	}
 
