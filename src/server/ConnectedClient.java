@@ -46,7 +46,7 @@ class ConnectedClient implements Runnable {
 		String baseCommand = args[0].toLowerCase();
 		switch(baseCommand) {
 			case "list":
-				sendMessage("Command still being developed");
+				list();
 				break;
 			case "help":
 				sendMessage("Commands include list, help, send, changechannel, disconnect, download, createchannel\nExperiment with them!");
@@ -69,6 +69,35 @@ class ConnectedClient implements Runnable {
 			default:
 				sendMessage("Command not understood");
 		}
+	}
+
+	private void list() {
+		String list = Server.roomHandler.getRoomList();
+		sendMessage(list);
+	}
+
+	private void help() {
+
+	}
+
+	private void sendFile() {
+
+	}
+
+	private void changeChannel() {
+
+	}
+
+	private void disconnect() {
+
+	}
+
+	private void downloadFile() {
+
+	}
+
+	private void createChannel() {
+
 	}
 
 	public void sendMessage(String message) {
