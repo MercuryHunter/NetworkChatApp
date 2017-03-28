@@ -49,12 +49,12 @@ class ConnectedClient implements Runnable {
 				list();
 				break;
 			case "help":
-				sendMessage("Commands include list, help, send, changechannel, disconnect, download, createchannel\nExperiment with them!");
+				help();
 				break;
 			case "send":
 				sendMessage("Command still being developed");
 				break;
-			case "changechannel":
+			case "changeroom":
 				sendMessage("Command still being developed");
 				break;
 			case "disconnect":
@@ -63,8 +63,8 @@ class ConnectedClient implements Runnable {
 			case "download":
 				sendMessage("Command still being developed");
 				break;
-			case "createchannel":
-				sendMessage("Command still being developed");
+			case "createroom":
+				createRoom(args);
 				break;
 			default:
 				sendMessage("Command not understood");
@@ -77,18 +77,11 @@ class ConnectedClient implements Runnable {
 	}
 
 	private void help() {
-
+		String help = "Commands include list, help, send <file>, download <file>,\ncreateroom <name>, changeroom <name>, disconnect\nExperiment with them!";
+		sendMessage(help);
 	}
 
 	private void sendFile() {
-
-	}
-
-	private void changeChannel() {
-
-	}
-
-	private void disconnect() {
 
 	}
 
@@ -96,7 +89,14 @@ class ConnectedClient implements Runnable {
 
 	}
 
-	private void createChannel() {
+	private void createRoom(String[] args) {
+	}
+
+	private void changeRoom() {
+
+	}
+
+	private void disconnect() {
 
 	}
 
