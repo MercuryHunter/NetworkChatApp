@@ -55,7 +55,7 @@ class ConnectedClient implements Runnable {
 				sendMessage("Command still being developed");
 				break;
 			case "changeroom":
-				sendMessage("Command still being developed");
+				changeRoom(args);
 				break;
 			case "disconnect":
 				sendMessage("Command still being developed");
@@ -100,8 +100,14 @@ class ConnectedClient implements Runnable {
 		else sendMessage("Could not create the room.");
 	}
 
-	private void changeRoom() {
-
+	private void changeRoom(String[] args) {
+		if(args.length != 2) {
+			sendMessage("Please provide a room name and no other arguments to the function.");
+			return;
+		}
+		Room newRoom = Server.roomHandler.getRoom(args[1]);
+		room.disconnect(this);
+		room = newRoom.join(this);
 	}
 
 	private void disconnect() {

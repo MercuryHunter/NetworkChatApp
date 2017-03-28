@@ -22,6 +22,10 @@ class Room {
 		return this;
 	}
 
+	public void disconnect(ConnectedClient client) {
+		clients.remove(client);
+	}
+
 	public void sendMessage(String message, ConnectedClient sender) {
 		for(ConnectedClient client : clients){
 			if (client != sender) client.sendMessage(message);
