@@ -110,8 +110,10 @@ class ConnectedClient implements Runnable {
 		room = newRoom.join(this);
 	}
 
+	// TODO: Have client kill their own threads on disconnect on client side
 	private void disconnect() {
-
+		room.disconnect(this);
+		Server.disconnect(this);
 	}
 
 	public void sendMessage(String message) {

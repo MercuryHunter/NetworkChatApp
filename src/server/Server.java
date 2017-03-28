@@ -10,6 +10,7 @@ public class Server {
 	// and then reject them.
 	static ArrayList<ConnectedClient> clients;
 	static int maxClients;
+	
 	private Thread connectorThread;
 	static RoomHandler roomHandler;
 
@@ -23,6 +24,11 @@ public class Server {
 		// Begin connecting clients
 		connectorThread = new Thread(new Connector(portNum));
 		connectorThread.start();
+	}
+
+	public void disconnect(ConnectedClient client) {
+		System.out.println("Client " + client.ID + " left server.");
+		clients.remove(client);
 	}
 
 	public static void main(String[] args) {

@@ -23,6 +23,7 @@ class Room {
 	}
 
 	public void disconnect(ConnectedClient client) {
+		System.out.println("Client " + client.ID + " left room: " + name);
 		clients.remove(client);
 	}
 
