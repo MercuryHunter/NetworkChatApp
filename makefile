@@ -33,6 +33,10 @@ ConnectedClient.class: ConnectedClient.java
 	@rm -rf $(BINDIR)/server/Server.class $(BINDIR)/server/Connector.class $(BINDIR)/server/ConnectedClient.class $(BINDIR)/server/RoomHandler.class $(BINDIR)/server/Room.class
 	@javac $(JFLAGS) $(SRCDIR)/server/Server.java $(SRCDIR)/server/Connector.java $(SRCDIR)/server/ConnectedClient.java $(SRCDIR)/server/RoomHandler.java $(SRCDIR)/server/Room.java
 
+RoomHandler.class: RoomHandler.java
+	@rm -rf $(BINDIR)/server/RoomHandler.class $(BINDIR)/server/Room.class
+	@javac $(JFLAGS) $(SRCDIR)/server/RoomHandler.java $(SRCDIR)/server/Room.java
+
 run_server: all
 	@echo "Variables: PORT MAXCLIENTS MAXROOMS"
 	@java -cp $(BINDIR) server.Server $(PORT) $(MAXCLIENTS) $(MAXROOMS)
