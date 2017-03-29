@@ -26,7 +26,8 @@ public class Server {
 		connectorThread.start();
 	}
 
-	public void disconnect(ConnectedClient client) {
+	public static void disconnect(ConnectedClient client) {
+		// TODO: Check if client was here first
 		System.out.println("Client " + client.ID + " left server.");
 		clients.remove(client);
 	}
