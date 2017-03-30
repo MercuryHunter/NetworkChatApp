@@ -48,3 +48,6 @@ run_client: all
 clean:
 	@rm -f $(BINDIR)/*.class
 	@rm -f $(BINDIR)/*/*.class
+
+clean_files:
+	@rm -rf files/*
