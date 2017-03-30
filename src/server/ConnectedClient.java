@@ -5,13 +5,20 @@ import java.io.*;
 
 class ConnectedClient implements Runnable {
 
+	public static int IDCounter = 0;
 	public int ID;
+
 	private BufferedReader receive;
 	private PrintWriter send;
+	
 	private Room room;
 
 	public ConnectedClient(Socket socket) {
-		ID = 1; // TODO: Changing IDs
+		// Generate ID
+		synchronized (ConnectedClient.class) {
+			ID = IDCounter;
+			IDCounter++;
+		}
 
 		// Join the default room
 		room = Server.roomHandler.getDefaultRoom().join(this);
