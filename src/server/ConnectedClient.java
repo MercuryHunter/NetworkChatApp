@@ -64,7 +64,7 @@ class ConnectedClient implements Runnable {
 				changeRoom(args);
 				break;
 			case "disconnect":
-				sendMessage("Command still being developed");
+				disconnect();
 				break;
 			default:
 				sendMessage("Command not understood");
