@@ -12,7 +12,7 @@ PORT = 1050
 MAXCLIENTS = 10
 MAXROOMS = 10
 
-OBJECTS=ConnectedClient.class Connector.class \
+OBJECTS=FileHandler.class ConnectedClient.class Connector.class \
 		RoomHandler.class Room.class Server.class \
 		Receiver.class Sender.class Client.class
 

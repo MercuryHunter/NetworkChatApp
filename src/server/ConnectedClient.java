@@ -51,6 +51,9 @@ class ConnectedClient implements Runnable {
 			case "help":
 				help();
 				break;
+			case "listfiles":
+				listFiles();
+				break;
 			case "send":
 				sendMessage("Command still being developed");
 				break;
@@ -79,6 +82,11 @@ class ConnectedClient implements Runnable {
 	private void help() {
 		String help = "Commands include list, help, send <file>, download <file>,\ncreateroom <name>, changeroom <name>, disconnect\nExperiment with them!";
 		sendMessage(help);
+	}
+
+	private void listFiles() {
+		String list = room.fileHandler.getFileList();
+		sendMessage(list);
 	}
 
 	private void sendFile() {

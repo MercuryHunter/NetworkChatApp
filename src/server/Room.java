@@ -6,12 +6,15 @@ class Room {
 
 	private int ID; // TODO: Check necessity
 	private String name;
+	public FileHandler fileHandler;
 
 	private ArrayList<ConnectedClient> clients;
 
 	public Room(String name) {
 		this.name = name;
 		clients = new ArrayList<ConnectedClient>();
+
+		fileHandler = new FileHandler(name);
 	}
 
 	public String getName() { return name; }
