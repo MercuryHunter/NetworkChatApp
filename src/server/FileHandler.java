@@ -42,15 +42,15 @@ class FileHandler {
 		return list;
 	}
 
-	public void createDataConnection() {
+	public void createDataConnection(int port) {
 
 	}
 
-	public void receiveFile(String fileName) {
+	public void receiveFile(String fileName, int port) {
 
 	}
 
-	public void sendFile(String fileName) {
+	public void sendFile(String fileName, int port) {
 
 	}
 
