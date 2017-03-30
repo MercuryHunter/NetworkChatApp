@@ -10,7 +10,7 @@ class ConnectedClient implements Runnable {
 
 	private BufferedReader receive;
 	private PrintWriter send;
-	
+
 	private Room room;
 
 	public ConnectedClient(Socket socket) {
@@ -46,6 +46,10 @@ class ConnectedClient implements Runnable {
 		catch(Exception x) {
 			x.printStackTrace();
 		}
+	}
+
+	private void getFileSendPortNumber() {
+		return 15000 + ID;
 	}
 
 	private void handleCommand(String[] args) {
