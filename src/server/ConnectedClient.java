@@ -48,12 +48,11 @@ class ConnectedClient implements Runnable {
 		}
 	}
 
-	private void getFileSendPortNumber() {
+	private int getFileSendPortNumber() {
 		return 15000 + ID;
 	}
 
 	private void handleCommand(String[] args) {
-		// TODO: Command Handling
 		String baseCommand = args[0].toLowerCase();
 		switch(baseCommand) {
 			case "list":
@@ -66,10 +65,10 @@ class ConnectedClient implements Runnable {
 				listFiles();
 				break;
 			case "send":
-				sendMessage("Command still being developed");
+				sendFile(args);
 				break;
 			case "download":
-				sendMessage("Command still being developed");
+				downloadFile(args);
 				break;
 			case "createroom":
 				createRoom(args);
@@ -100,12 +99,24 @@ class ConnectedClient implements Runnable {
 		sendMessage(list);
 	}
 
-	private void sendFile() {
+	private void sendFile(String[] args) {
+		if(args.length != 2) {
+			sendMessage("Please provide a file name and no other arguments to the function.");
+			return;
+		}
 
+		room.fileHandler.sendFile(this, args[1], getFileSendPortNumber());
 	}
 
-	private void downloadFile() {
+	private void downloadFile(String[] args) {
+		if(args.length != 2) {
+			sendMessage("Please provide a file name and no other arguments to the function.");
+			return;
+		}
 
+		if(room.fileHandler.hasFile(args[1]))
+			room.fileHandler.receiveFile(this, args[1], getFileSendPortNumber());
+		else sendMessage("Sorry, we could not find the file you were looking for.");
 	}
 
 	private void createRoom(String[] args) {

@@ -3,11 +3,13 @@ package server;
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 class FileHandler {
 
 	private String roomName;
 	private ArrayList<File> files;
+	private ServerSocket server;
 
 	public FileHandler(String roomName) {
 		this.roomName = roomName;
@@ -42,16 +44,63 @@ class FileHandler {
 		return list;
 	}
 
-	public void createDataConnection(int port) {
-
+	// TODO: Linear scan, oh no why, use a map?
+	public boolean hasFile(String fileName) {
+		for (File file : files) {
+			if (file.getName().equals(fileName)) return true;
+		}
+		return false;
+	}
+	public File getFile(String fileName) {
+		for (File file : files) {
+			if (file.getName().equals(fileName)) return file;
+		}
+		return null;
 	}
 
-	public void receiveFile(String fileName, int port) {
-
+	private Socket createDataConnection(int port) {
+		Socket clientSocket = null;
+		try {
+			server = new ServerSocket(port);
+			clientSocket = server.accept();
+		}
+		catch(IOException e) {
+			System.err.println("Error creating socket to client on port: " + port);
+			e.printStackTrace();
+		}
+		return clientSocket;
 	}
 
-	public void sendFile(String fileName, int port) {
+	// Client receives file
+	public synchronized void receiveFile(ConnectedClient client, String fileName, int port) {
+		try {
+			File file = getFile(fileName);
+			int fileSize = (int)file.length();
 
+			client.sendMessage(String.format("%s %s %d %d","/beginfilereceive", fileName, port, fileSize));
+
+			Socket dataSocket = createDataConnection(port);
+			GZIPOutputStream output = new GZIPOutputStream(dataSocket.getOutputStream());
+
+			byte[] fileBytes  = new byte[fileSize];
+			FileInputStream fileInputStream = new FileInputStream(file);
+			BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+			bufferedInputStream.read(fileBytes, 0, fileSize); // Read file into byte array
+
+			System.out.printf("Sending %s to client %d (%d bytes)\n", fileName, client.ID, fileSize);
+			output.write(fileBytes, 0, fileSize);
+			output.flush();
+			System.out.printf("Sent %s\n", fileName);
+		}
+		catch(Exception e) {
+			System.err.println("Something broke in sending to client.");
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized void sendFile(ConnectedClient client, String fileName, int port) {
+		client.sendMessage(String.format("%s %s %d","/beginfilesend", fileName, port));
+		Socket dataSocket = createDataConnection(port);
 	}
 
 }

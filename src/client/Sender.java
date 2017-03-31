@@ -22,10 +22,10 @@ class Sender implements Runnable {
 			while((toSend = stdIn.readLine()) != null) {
 				// Don't append name if it's a command
 				if(toSend.charAt(0) == '/') {
-					if(toSend.startsWith("/send") || toSend.startsWith("/receive")) {
+					if(toSend.startsWith("/send") || toSend.startsWith("/download")) {
 						// Check if file exists
 						String[] fileArgs = toSend.split(" ");
-						if(args.length != 2) {
+						if(fileArgs.length != 2) {
 							System.out.println("Please provide a file name and no other arguments to the function.");
 							continue;
 						}
@@ -37,9 +37,6 @@ class Sender implements Runnable {
 								System.out.println("That file doesn't exist!");
 								continue;
 							}
-						}
-						else {
-							// Begin file retrieval depending on server response
 						}
 					}
 					send.println(toSend);
