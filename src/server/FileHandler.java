@@ -83,13 +83,16 @@ class FileHandler {
 			GZIPOutputStream output = new GZIPOutputStream(dataSocket.getOutputStream());
 
 			byte[] fileBytes  = new byte[fileSize];
-			FileInputStream fileInputStream = new FileInputStream(file);
-			BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-			bufferedInputStream.read(fileBytes, 0, fileSize); // Read file into byte array
+			BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(file));
+			fileInput.read(fileBytes, 0, fileSize); // Read file into byte array
+			fileInput.close();
 
-			System.out.printf("Sending %s to client %d (%d bytes)\n", fileName, client.ID, fileSize);
+			System.out.printf("Sending %s to client %d. (%d bytes)\n", fileName, client.ID, fileSize);
+			
 			output.write(fileBytes, 0, fileSize);
 			output.flush();
+			output.close();
+
 			System.out.printf("Sent %s\n", fileName);
 		}
 		catch(Exception e) {

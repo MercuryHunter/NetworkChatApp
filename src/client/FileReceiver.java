@@ -23,29 +23,36 @@ class FileReceiver implements Runnable {
 			System.out.println("Downloading file...");
 
 			// Receive File
-			byte[] file = new byte[fileSize];
-
 			GZIPInputStream input = new GZIPInputStream(dataSocket.getInputStream());
-			BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("download/" + fileName));
-			
-			int bytesRead = input.read(file, 0, fileSize);
-			int current = bytesRead;
-			do {
-				bytesRead = input.read(file, current, (fileSize - current));
-				if(bytesRead >= 0) current += bytesRead;
-				System.out.println(current);
-			} while(bytesRead > -1);
+			BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream("download/" + fileName), fileSize);
 
-			// Write into file
-			bufferedOutputStream.write(file, 0, fileSize);
-			bufferedOutputStream.flush();
+			byte[] buffer = new byte[1024];
+			int count;
+			while ((count = input.read(buffer)) > 0) {
+				//debugPrintArrayOfBytes(buffer, "Read:");
+				fileOutput.write(buffer, 0, count);
+			}
 
-			System.out.printf("File %s download (%d bytes)\n", fileName, current);
+			// Write into file and close streams
+			input.close();
+			fileOutput.flush();
+			fileOutput.close();
+
+			System.out.printf("File %s downloaded. (%d bytes)\n", fileName, fileSize);
 		}
 		catch (Exception e) {
 			System.err.println("Something went wrong receiving the file");
 			e.printStackTrace();
 		}
+	}
+
+	// DEBUG CODE
+	private void debugPrintArrayOfBytes(byte[] bytes, String message) {
+		System.out.println(message);
+		for(int i = 0; i < bytes.length; i++) {
+			System.out.print(bytes[i] + ";");
+		}
+		System.out.println();
 	}
 
 }
