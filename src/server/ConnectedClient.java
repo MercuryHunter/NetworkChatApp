@@ -53,6 +53,7 @@ class ConnectedClient implements Runnable {
 	}
 
 	private void handleCommand(String[] args) {
+		// TODO: List users command.
 		String baseCommand = args[0].toLowerCase();
 		switch(baseCommand) {
 			case "list":
