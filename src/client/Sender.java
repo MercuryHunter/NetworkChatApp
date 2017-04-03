@@ -3,7 +3,7 @@ package client;
 import java.net.*;
 import java.io.*;
 
-class Sender implements Runnable {
+public class Sender implements Runnable {
 
 	PrintWriter send;
 	String name;
@@ -15,41 +15,51 @@ class Sender implements Runnable {
 
 	public void run() {
 		try {
+			// A BufferedReader for user input
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
 			String toSend;
-			// Send all data that comes in from stdIn
 			while((toSend = stdIn.readLine()) != null) {
-				// Don't append name if it's a command
-				if(toSend.charAt(0) == '/') {
-					if(toSend.startsWith("/send") || toSend.startsWith("/download")) {
-						// Check if file exists
-						String[] fileArgs = toSend.split(" ");
-						if(fileArgs.length != 2) {
-							System.out.println("Please provide a file name and no other arguments to the function.");
-							continue;
-						}
+				handleInput(toSend);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-						if(toSend.startsWith("/send")) {
-							// Check if file exists, and start a file sender
-							File file = new File(fileArgs[1]);
-							if(!file.exists()) {
-								System.out.println("That file doesn't exist!");
-								continue;
-							}
-						}
-					}
-					send.println(toSend);
-				}
-				// Otherwise try to append name if it exists
-				else {
-					String sendString = name == "" ? toSend : name + ": " + toSend;
-					send.println(sendString);
+	private void handleInput(String input) {
+		// Command Handling - don't append name.
+		if(input.charAt(0) == '/') {
+			handleCommand(input);
+		}
+		// Otherwise append name to input and send
+		else {
+			String sendString = name + ": " + input;
+			send.println(sendString);
+		}
+	}
+
+	private void handleCommand (String input) {
+		if(input.startsWith("/send") || input.startsWith("/download")) {
+			// Ensure only a filename is provided
+			String[] fileArgs = input.split(" ");
+			if(fileArgs.length != 2) {
+				System.out.println("Please provide a file name and no other arguments to the function.");
+				return;
+			}
+
+			// Check if file exists before trying to send it
+			if(input.startsWith("/send")) {
+				File file = new File(fileArgs[1]);
+				if(!file.exists()) {
+					System.out.println("That file doesn't exist!");
+					return;
 				}
 			}
 		}
-		catch(Exception x) {
-			x.printStackTrace();
-		}
+
+		// Send message if checks pass
+		send.println(input);
 	}
 }
