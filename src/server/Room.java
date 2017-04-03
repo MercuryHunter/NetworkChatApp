@@ -2,18 +2,20 @@ package server;
 
 import java.util.*;
 
-class Room {
+public class Room {
 
 	private int ID; // TODO: Check necessity
+
+	// A room name and file handler for sending/receiving files
 	private String name;
 	public FileHandler fileHandler;
 
+	// Clients connected only to this room.
 	private ArrayList<ConnectedClient> clients;
 
 	public Room(String name) {
 		this.name = name;
 		clients = new ArrayList<ConnectedClient>();
-
 		fileHandler = new FileHandler(name);
 	}
 
