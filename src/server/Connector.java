@@ -6,10 +6,12 @@ import java.io.*;
 public class Connector implements Runnable {
 
 	ServerSocket server;
+	public static volatile boolean running = true;
 
 	public Connector(int portNum) {
+		// Start a socket for incoming connections
+
 		try {
-			// Start a socket for incoming connections
 			server = new ServerSocket(portNum);
 		}
 		catch(IOException e) {
@@ -21,16 +23,23 @@ public class Connector implements Runnable {
 	}
 
 	public void run() {
+		// Add clients as space is available in the server.
 		try {
-			while(true) {
-				// TODO: Blocking when messages happen.
+			while(running) {
+				// TODO: Blocking when messages happen so they don't come in mid-way.
+
+				// Check if there's space for the client, and add as necessary.
+				// As this is the only thing adding clients, we can't have too many added.
 				if(Server.clients.size() >= Server.maxClients) {
 					Thread.sleep(3000);
 					continue;
 				}
+
+				// Accept in a new client
 				Socket clientSocket = server.accept();
 				System.out.println("Client connected");
 
+				// Create a ConnectedClient object for them and add them to the server.
 				ConnectedClient newClient = new ConnectedClient(clientSocket);
 				Server.clients.add(newClient);
 				new Thread(newClient).start();
