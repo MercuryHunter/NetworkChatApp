@@ -8,15 +8,19 @@ class RoomHandler {
 	static int maxRooms;
 
 	public RoomHandler(int maxRooms) {
+		// Initialise list of rooms
 		this.maxRooms = maxRooms;
 		rooms = new ArrayList<Room>(maxRooms);
 
 		// Make default room
 		rooms.add(new Room("Default"));
+
+		// TODO: Discover previously created rooms
 	}
 
 	public Room getDefaultRoom() { return rooms.get(0); }
 
+	// TODO: Oh no, another linear scan, why no map?
 	public Room getRoom(String name) {
 		for (Room room : rooms) {
 			if(room.getName().equals(name)) return room;
@@ -35,13 +39,13 @@ class RoomHandler {
 		return list;
 	}
 
-	// TODO: Safety between threads?
-	public void removeRoom(String roomName) {
+	// Remove room if it's not default
+	public synchronized void removeRoom(String roomName) {
 		// TODO: Implement
 	}
 
-	public boolean createRoom(String roomName) {
-		// TODO: Needs to be thread safe to stop too many rooms being created.
+	// Add a room if there is space to add
+	public synchronized boolean createRoom(String roomName) {
 		if(rooms.size() >= maxRooms) return false;
 		rooms.add(new Room(roomName));
 		return true;
