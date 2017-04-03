@@ -7,6 +7,8 @@ import java.util.zip.*;
 
 class FileHandler {
 
+	// TODO: Deal with multiple spaces in file name
+
 	private String roomName;
 	private ArrayList<File> files;
 	private ServerSocket server;
@@ -14,17 +16,19 @@ class FileHandler {
 	public FileHandler(String roomName) {
 		this.roomName = roomName;
 
-		// Initialise folder
+		// Initialise folder - store the names of files in room.
 		files = new ArrayList<File>();
 		File folder = new File(getFolderLocation());
 		if(!folder.exists()) folder.mkdirs();
 		getFilesForFolder(folder);
 	}
 
+	// Get appropriate folder location for room
 	private String getFolderLocation() {
 		return "files/" + roomName;
 	}
 
+	// Scan files in a folder and add to files list
 	private void getFilesForFolder(File folder) {
 		for (File file : folder.listFiles()) {
 			if (!file.isDirectory()) files.add(file);
@@ -55,6 +59,8 @@ class FileHandler {
 		}
 		return false;
 	}
+
+	// Get a file based on fileName
 	public File getFile(String fileName) {
 		for (File file : files) {
 			if (file.getName().equals(fileName)) return file;
@@ -62,6 +68,7 @@ class FileHandler {
 		return null;
 	}
 
+	// Initiate a data connection with a client.
 	private Socket createDataConnection(int port) {
 		Socket clientSocket = null;
 		try {
@@ -75,25 +82,36 @@ class FileHandler {
 		return clientSocket;
 	}
 
-	// Client receives file
+	// This is from the perspective of a client *receiving* a file
 	public synchronized void receiveFile(ConnectedClient client, String fileName, int port) {
 		try {
+			System.out.println("Beginning file send to client.");
+
+			// Deal with the file
 			File file = getFile(fileName);
 			int fileSize = (int)file.length();
 
+			// Instruct client to open data connection and make use of it
 			client.sendMessage(String.format("%s %s %d %d","/beginfilereceive", fileName, port, fileSize));
 
+			// Open data connection to client
 			Socket dataSocket = createDataConnection(port);
+
+			// Open compressed stream output
 			GZIPOutputStream output = new GZIPOutputStream(dataSocket.getOutputStream());
 
+			// Read file into byte array using BufferedInputStream
 			byte[] fileBytes  = new byte[fileSize];
 			BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(file));
-			fileInput.read(fileBytes, 0, fileSize); // Read file into byte array
+			fileInput.read(fileBytes, 0, fileSize);
 			fileInput.close();
 
 			System.out.printf("Sending %s to client %d. (%d bytes)\n", fileName, client.ID, fileSize);
 			
+			// Write to output data stream
 			output.write(fileBytes, 0, fileSize);
+
+			// Close streams
 			output.flush();
 			output.close();
 
@@ -105,28 +123,29 @@ class FileHandler {
 		}
 	}
 
+	// This is from the perspective of a client *sending* a file
 	public synchronized void sendFile(ConnectedClient client, String fileName, int port) {
 		// TODO: Update file list.
 		try {
+			System.out.println("Beginning file receive from client.");
+
+			// Instruct client to open data connection and make use of it
 			client.sendMessage(String.format("%s %s %d","/beginfilesend", fileName, port));
 			Socket dataSocket = createDataConnection(port);
 
-			System.out.println("Downloading file...");
-
+			// Open compressed stream and stream to file output
 			File file = new File(fileName);
-
-			// Receive File
 			GZIPInputStream input = new GZIPInputStream(dataSocket.getInputStream());
 			BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(getFolderLocation() + "/" + file.getName()));//, fileSize);
-
+			
+			// Read data into buffer and write to file
 			byte[] buffer = new byte[1024];
 			int count;
 			while ((count = input.read(buffer)) > 0) {
-				//debugPrintArrayOfBytes(buffer, "Read:");
 				fileOutput.write(buffer, 0, count);
 			}
 
-			// Write into file and close streams
+			// Close streams
 			input.close();
 			fileOutput.flush();
 			fileOutput.close();
