@@ -14,7 +14,7 @@ class ConnectedClient implements Runnable {
 	private Room room;
 
 	public ConnectedClient(Socket socket) {
-		// Generate ID
+		// Generate ID for client
 		synchronized (ConnectedClient.class) {
 			ID = IDCounter;
 			IDCounter++;
@@ -23,6 +23,7 @@ class ConnectedClient implements Runnable {
 		// Join the default room
 		room = Server.roomHandler.getDefaultRoom().join(this);
 
+		// Create access points for input and output
 		try{
 			receive = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			send = new PrintWriter(socket.getOutputStream(), true);
@@ -30,16 +31,21 @@ class ConnectedClient implements Runnable {
 		catch(Exception e) {
 			System.err.println("Error creating thing. This is temporary.");
 		}
+
+		// TODO: Display room + users
 	}
 
 	public void run() {
+		// Handle user input
 		try {
 			String input;
 			while((input = receive.readLine()) != null) {
+				// If it's a command, handle it
 				if(input.charAt(0) == '/') {
 					String[] commandArgs = input.substring(1, input.length()).split(" ");
 					handleCommand(commandArgs);
 				}
+				// Otherwise send the message to the room
 				else room.sendMessage(input, this);
 			}
 		}
@@ -48,12 +54,15 @@ class ConnectedClient implements Runnable {
 		}
 	}
 
+	// Port number for data transfer
 	private int getFileSendPortNumber() {
 		return 15000 + ID;
 	}
 
+	// Deal with the commands users can send, and provide them with output
 	private void handleCommand(String[] args) {
 		// TODO: List users command.
+		// TODO: Current room command.
 		String baseCommand = args[0].toLowerCase();
 		switch(baseCommand) {
 			case "list":
