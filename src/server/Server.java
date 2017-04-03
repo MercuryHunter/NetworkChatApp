@@ -29,10 +29,8 @@ public class Server {
 
 	// Disconnect a connected client
 	public static void disconnect(ConnectedClient client) {
-		if(clients.contains(client)) {
-			System.out.println("Client " + client.ID + " left server.");
-			clients.remove(client);
-		}
+		System.out.println("Client " + client.ID + " left server.");
+		clients.remove(client);
 	}
 
 	public static void main(String[] args) {
