@@ -41,7 +41,7 @@ class FileReceiver implements Runnable {
 			System.out.printf("File %s downloaded. (%d bytes)\n", fileName, fileSize);
 		}
 		catch (Exception e) {
-			System.err.println("Something went wrong receiving the file");
+			System.err.println("Something went wrong receiving from server.");
 			e.printStackTrace();
 		}
 	}

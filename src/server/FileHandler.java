@@ -16,9 +16,13 @@ class FileHandler {
 
 		// Initialise folder
 		files = new ArrayList<File>();
-		File folder = new File("files/" + roomName);
+		File folder = new File(getFolderLocation());
 		if(!folder.exists()) folder.mkdirs();
 		getFilesForFolder(folder);
+	}
+
+	private String getFolderLocation() {
+		return "files/" + roomName;
 	}
 
 	private void getFilesForFolder(File folder) {
@@ -102,8 +106,37 @@ class FileHandler {
 	}
 
 	public synchronized void sendFile(ConnectedClient client, String fileName, int port) {
-		client.sendMessage(String.format("%s %s %d","/beginfilesend", fileName, port));
-		Socket dataSocket = createDataConnection(port);
+		// TODO: Update file list.
+		try {
+			client.sendMessage(String.format("%s %s %d","/beginfilesend", fileName, port));
+			Socket dataSocket = createDataConnection(port);
+
+			System.out.println("Downloading file...");
+
+			File file = new File(fileName);
+
+			// Receive File
+			GZIPInputStream input = new GZIPInputStream(dataSocket.getInputStream());
+			BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(getFolderLocation() + "/" + file.getName()));//, fileSize);
+
+			byte[] buffer = new byte[1024];
+			int count;
+			while ((count = input.read(buffer)) > 0) {
+				//debugPrintArrayOfBytes(buffer, "Read:");
+				fileOutput.write(buffer, 0, count);
+			}
+
+			// Write into file and close streams
+			input.close();
+			fileOutput.flush();
+			fileOutput.close();
+
+			System.out.printf("File %s downloaded to %s.\n", file.getName(), roomName); // TODO: File size displayed? 
+		}
+		catch(Exception e) {
+			System.err.println("Something broke in receiving from client.");
+			e.printStackTrace();
+		}
 	}
 
 }
