@@ -13,10 +13,11 @@ public class Client {
 		this.name = client_name;
 
 		try {
+			// Connect to server
 			Socket mySocket = new Socket(host, portNum);
 			System.out.println("Connected");
 			
-			// Start threads for sending and receiving
+			// Start threads for sending and receiving data
 			sender = new Sender(new PrintWriter(mySocket.getOutputStream(), true), client_name);
 			receiver = new Receiver(new BufferedReader(new InputStreamReader(mySocket.getInputStream())), host);
 			
@@ -39,6 +40,8 @@ public class Client {
 	}
 
 	public static void main(String[] args) {
+		// Deal with command line arguments and begin client
+
 		if(args.length != 3) {
 			System.err.println("Usage: java Client <host> <port> <client_name>");
 			System.exit(-1);
