@@ -2,6 +2,7 @@ package client;
 
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
 
 public class Receiver implements Runnable {
 
@@ -40,8 +41,8 @@ public class Receiver implements Runnable {
 		// Parse parameters
 		String[] args = input.split(" ");
 
-		String fileName = args[1];
-		int port = Integer.parseInt(args[2]);
+		int port = Integer.parseInt(args[1]);
+		String fileName = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 
 		// Begin thread to send file.
 		Thread senderThread = new Thread(new FileSender(fileName, port, host));
@@ -51,10 +52,10 @@ public class Receiver implements Runnable {
 	private void handleFileReceive(String input) {
 		// Parse parameters
 		String[] args = input.split(" ");
-
-		String fileName = args[1];
-		int port = Integer.parseInt(args[2]);
-		int fileSize = Integer.parseInt(args[3]);
+		
+		int port = Integer.parseInt(args[1]);
+		int fileSize = Integer.parseInt(args[2]);
+		String fileName = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
 
 		// Begin thread to receive file.
 		Thread receiverThread = new Thread(new FileReceiver(fileName, port, fileSize, host));

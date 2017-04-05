@@ -2,6 +2,7 @@ package server;
 
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
 
 class ConnectedClient implements Runnable {
 
@@ -52,11 +53,6 @@ class ConnectedClient implements Runnable {
 		catch(Exception x) {
 			x.printStackTrace();
 		}
-	}
-
-	// Port number for data transfer
-	private int getFileSendPortNumber() {
-		return 15000 + ID;
 	}
 
 	// Deal with the commands users can send, and provide them with output
@@ -110,22 +106,24 @@ class ConnectedClient implements Runnable {
 	}
 
 	private void sendFile(String[] args) {
-		if(args.length != 2) {
+		String filename = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+		if(args.equals("")) {
 			sendMessage("Please provide a file name and no other arguments to the function.");
 			return;
 		}
 
-		room.fileHandler.sendFile(this, args[1], getFileSendPortNumber());
+		room.fileHandler.sendFile(this, filename);
 	}
 
 	private void downloadFile(String[] args) {
-		if(args.length != 2) {
+		String filename = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+		if(args.equals("")) {
 			sendMessage("Please provide a file name and no other arguments to the function.");
 			return;
 		}
 
-		if(room.fileHandler.hasFile(args[1]))
-			room.fileHandler.receiveFile(this, args[1], getFileSendPortNumber());
+		if(room.fileHandler.hasFile(filename))
+			room.fileHandler.receiveFile(this, filename);
 		else sendMessage("Sorry, we could not find the file you were looking for.");
 	}
 

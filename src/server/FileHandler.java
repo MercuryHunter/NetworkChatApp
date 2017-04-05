@@ -12,15 +12,26 @@ class FileHandler {
 	private String roomName;
 	private ArrayList<File> files;
 	private ServerSocket server;
+	private int port;
 
-	public FileHandler(String roomName) {
+	public FileHandler(String roomName, int port) {
 		this.roomName = roomName;
+		this.port = port;
 
 		// Initialise folder - store the names of files in room.
 		files = new ArrayList<File>();
 		File folder = new File(getFolderLocation());
 		if(!folder.exists()) folder.mkdirs();
 		getFilesForFolder(folder);
+
+		// Server socket for file handling
+		try {
+			server = new ServerSocket(port);
+		}
+		catch(IOException e) {
+			System.out.println("Room: " + roomName + " encountered an error creating a server socket for file transfer.");
+			e.printStackTrace();
+		}
 	}
 
 	// Get appropriate folder location for room
@@ -72,7 +83,6 @@ class FileHandler {
 	private Socket createDataConnection(int port) {
 		Socket clientSocket = null;
 		try {
-			server = new ServerSocket(port);
 			clientSocket = server.accept();
 		}
 		catch(IOException e) {
@@ -83,7 +93,7 @@ class FileHandler {
 	}
 
 	// This is from the perspective of a client *receiving* a file
-	public synchronized void receiveFile(ConnectedClient client, String fileName, int port) {
+	public synchronized void receiveFile(ConnectedClient client, String fileName) {
 		try {
 			System.out.println("Beginning file send to client.");
 
@@ -92,7 +102,7 @@ class FileHandler {
 			int fileSize = (int)file.length();
 
 			// Instruct client to open data connection and make use of it
-			client.sendMessage(String.format("%s %s %d %d","/beginfilereceive", fileName, port, fileSize));
+			client.sendMessage(String.format("%s %d %d %s","/beginfilereceive", port, fileSize, fileName));
 
 			// Open data connection to client
 			Socket dataSocket = createDataConnection(port);
@@ -114,8 +124,9 @@ class FileHandler {
 			// Close streams
 			output.flush();
 			output.close();
+			dataSocket.close();
 
-			System.out.printf("Sent %s\n", fileName);
+			System.out.printf("Sent \"%s\"\n", fileName);
 		}
 		catch(Exception e) {
 			System.err.println("Something broke in sending to client.");
@@ -124,13 +135,13 @@ class FileHandler {
 	}
 
 	// This is from the perspective of a client *sending* a file
-	public synchronized void sendFile(ConnectedClient client, String fileName, int port) {
+	public synchronized void sendFile(ConnectedClient client, String fileName) {
 		// TODO: Update file list.
 		try {
 			System.out.println("Beginning file receive from client.");
 
 			// Instruct client to open data connection and make use of it
-			client.sendMessage(String.format("%s %s %d","/beginfilesend", fileName, port));
+			client.sendMessage(String.format("%s %d %s","/beginfilesend", port, fileName));
 			Socket dataSocket = createDataConnection(port);
 
 			// Open compressed stream and stream to file output
@@ -149,8 +160,9 @@ class FileHandler {
 			input.close();
 			fileOutput.flush();
 			fileOutput.close();
+			dataSocket.close();
 
-			System.out.printf("File %s downloaded to %s.\n", file.getName(), roomName); // TODO: File size displayed? 
+			System.out.printf("File \"%s\" downloaded to %s.\n", file.getName(), roomName); // TODO: File size displayed? 
 		}
 		catch(Exception e) {
 			System.err.println("Something broke in receiving from client.");

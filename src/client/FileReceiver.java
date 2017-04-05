@@ -38,6 +38,7 @@ public class FileReceiver implements Runnable {
 			input.close();
 			fileOutput.flush();
 			fileOutput.close();
+			dataSocket.close();
 
 			System.out.printf("File %s downloaded. (%d bytes)\n", fileName, fileSize);
 		}

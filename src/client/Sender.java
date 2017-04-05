@@ -41,17 +41,18 @@ public class Sender implements Runnable {
 	}
 
 	private void handleCommand (String input) {
+		input = input.replace("\\ ", " ");
 		if(input.startsWith("/send") || input.startsWith("/download")) {
 			// Ensure only a filename is provided
-			String[] fileArgs = input.split(" ");
-			if(fileArgs.length != 2) {
+			String args = input.substring(input.indexOf(" ") + 1);
+			if(args.equals("")) {
 				System.out.println("Please provide a file name and no other arguments to the function.");
 				return;
 			}
 
 			// Check if file exists before trying to send it
 			if(input.startsWith("/send")) {
-				File file = new File(fileArgs[1]);
+				File file = new File(args);
 				if(!file.exists()) {
 					System.out.println("That file doesn't exist!");
 					return;

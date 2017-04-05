@@ -44,6 +44,7 @@ public class FileSender implements Runnable {
 			// Close streams
 			output.flush();
 			output.close();
+			dataSocket.close();
 
 			System.out.printf("Sent %s\n", fileName);
 		}

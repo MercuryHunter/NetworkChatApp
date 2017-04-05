@@ -4,20 +4,29 @@ import java.util.*;
 
 public class Room {
 
-	private int ID; // TODO: Check necessity
+	public static int IDCounter = 0;
+	public int ID;
 	// TODO: Synchronize for messages
 
 	// A room name and file handler for sending/receiving files
 	private String name;
 	public FileHandler fileHandler;
+	private int port;
 
 	// Clients connected only to this room.
 	private ArrayList<ConnectedClient> clients;
 
 	public Room(String name) {
+		synchronized (Room.class) {
+			ID = IDCounter;
+			IDCounter++;
+		}
+
+		port = 15000 + ID;
+
 		this.name = name;
 		clients = new ArrayList<ConnectedClient>();
-		fileHandler = new FileHandler(name);
+		fileHandler = new FileHandler(name, port);
 	}
 
 	public String getName() { return name; }
