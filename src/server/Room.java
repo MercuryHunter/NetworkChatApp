@@ -5,6 +5,7 @@ import java.util.*;
 public class Room {
 
 	private int ID; // TODO: Check necessity
+	// TODO: Synchronize for messages
 
 	// A room name and file handler for sending/receiving files
 	private String name;
