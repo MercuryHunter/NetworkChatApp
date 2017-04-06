@@ -30,13 +30,11 @@ class RoomHandler {
 
 	// Return a formatted string of the list of rooms
 	public String getRoomList() {
-		// TODO: Switch to String builder thing, can't remember what it's called
-		String list = "";
-		for (Room room : rooms) {
-			list = list + room.getName() + "\n";
-		}
-		list = list.substring(0, list.length() - 1);
-		return list;
+		StringBuilder list = new StringBuilder("------- Start of room list -------\n");
+		for (Room room : rooms)
+			list.append(room.getName() + "\n");
+		list.append("-------- End of room list --------");
+		return list.toString();
 	}
 
 	// Remove room if it's not default
