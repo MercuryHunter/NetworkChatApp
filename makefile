@@ -47,11 +47,11 @@ FileSender.class: FileSender.java
 	@javac $(JFLAGS) $(SRCDIR)/client/FileSender.java $(SRCDIR)/client/Receiver.java $(SRCDIR)/client/Sender.java
 
 run_server: all
-	@echo "Variables: PORT MAXCLIENTS MAXROOMS"
+	@echo "Variables: Port:$(PORT) Max Clients:$(MAXCLIENTS) Max Rooms:$(MAXROOMS)"
 	@java -cp $(BINDIR) server.Server $(PORT) $(MAXCLIENTS) $(MAXROOMS)
 
 run_client: all
-	@echo "Variables: IP PORT NAME"
+	@echo "Variables: IP:$(IP) Port:$(PORT) Name:$(NAME)"
 	@java -cp $(BINDIR) client.Client $(IP) $(PORT) $(NAME) 
 				
 clean:
