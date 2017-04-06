@@ -7,21 +7,29 @@ import java.util.Arrays;
 public class Receiver implements Runnable {
 
 	BufferedReader receive;
-	String host; 
+	String host;
+	Socket socket;
 	// Host is required for file transfers, which are started on receiving the appropriate message.
 
-	public Receiver(BufferedReader receive, String host) {
+	public static volatile boolean running = true;
+
+	public Receiver(BufferedReader receive, String host, Socket socket) {
 		this.receive = receive;
 		this.host = host;
+		this.socket = socket;
 	}
 
 	public void run() {
 		// Continuously receive input and deal with it as necessary.
 		try {
 			String input;
-			while((input = receive.readLine()) != null) {
+
+			while(running && (input = receive.readLine()) != null) {
 				handleInput(input);
 			}
+
+			receive.close();
+			socket.close();
 		}
 		catch(Exception x) {
 			x.printStackTrace();
@@ -33,6 +41,8 @@ public class Receiver implements Runnable {
 			handleFileSend(input);
 		else if(input.startsWith("/beginfilereceive"))
 			handleFileReceive(input);
+		else if(input.startsWith("/disconnect"))
+			running = false;
 		else System.out.println(input);
 	}
 

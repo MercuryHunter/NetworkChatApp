@@ -12,6 +12,8 @@ public class Sender implements Runnable {
 	PrintWriter send;
 	String name;
 
+	public static volatile boolean running = true;
+
 	public Sender(PrintWriter send, String name) {
 		this.send = send;
 		this.name = name;
@@ -20,14 +22,18 @@ public class Sender implements Runnable {
 	}
 
 	public void run() {
+		
 		try {
 			// A BufferedReader for user input
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 			
 			String toSend;
-			while((toSend = stdIn.readLine()) != null) {
+			while(running && (toSend = stdIn.readLine()) != null) {
 				handleInput(toSend);
 			}
+
+			stdIn.close();
+			send.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -66,6 +72,7 @@ public class Sender implements Runnable {
 				filesToBeSent.add(file);
 			}
 		}
+		if(input.startsWith("/disconnect")) running = false;
 
 		// Send message if checks pass
 		send.println(input);

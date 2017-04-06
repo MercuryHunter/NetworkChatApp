@@ -154,8 +154,8 @@ class ConnectedClient implements Runnable {
 		else sendMessage("Room not found!");
 	}
 
-	// TODO: Have client kill their own threads on disconnect on client side
 	private void disconnect() {
+		sendMessage("/disconnect");
 		room.disconnect(this);
 		Server.disconnect(this);
 	}

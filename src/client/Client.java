@@ -19,7 +19,7 @@ public class Client {
 			
 			// Start threads for sending and receiving data
 			sender = new Sender(new PrintWriter(mySocket.getOutputStream(), true), client_name);
-			receiver = new Receiver(new BufferedReader(new InputStreamReader(mySocket.getInputStream())), host);
+			receiver = new Receiver(new BufferedReader(new InputStreamReader(mySocket.getInputStream())), host, mySocket);
 			
 			Thread sendThread = new Thread(sender);
 			Thread receiverThread = new Thread(receiver);
