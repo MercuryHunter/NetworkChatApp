@@ -162,6 +162,8 @@ class FileHandler {
 			fileOutput.close();
 			dataSocket.close();
 
+			files.add(file);
+
 			System.out.printf("File \"%s\" downloaded to %s.\n", file.getName(), roomName); // TODO: File size displayed? 
 		}
 		catch(Exception e) {
