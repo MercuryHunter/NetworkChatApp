@@ -48,19 +48,17 @@ class FileHandler {
 
 	// Return a formatted string of the files stored in the room
 	public String getFileList() {
-		// TODO: String builder thing
-
 		if(files.size() <= 0)
 			return "No files were found in this room.";
 
-		String list = "------- Start of file list -------\n";
+		StringBuilder list = new StringBuilder("------- Start of file list -------\n");
 
 		for(File file : files)
-			list = list + file.getName() + " (" + (int)file.length() + " bytes)\n";
+			list.append(String.format("%s (%d bytes)\n", file.getName(), (int)file.length()));
 
-		list = list + "-------- End of file list --------";
+		list.append("-------- End of file list --------");
 
-		return list;
+		return list.toString();
 	}
 
 	// TODO: Linear scan, oh no why, use a map?
