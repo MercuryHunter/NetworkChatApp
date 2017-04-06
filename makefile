@@ -14,8 +14,8 @@ MAXROOMS = 10
 
 OBJECTS=ConnectedClient.class FileHandler.class Connector.class \
 		Room.class RoomHandler.class Server.class \
-		FileReceiver.class Receiver.class \
-		Sender.class FileSender.class Client.class
+		FileReceiver.class FileSender.class \
+		Sender.class Receiver.class Client.class
 
 vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
 vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server
@@ -41,6 +41,10 @@ ConnectedClient.class: ConnectedClient.java
 RoomHandler.class: RoomHandler.java
 	@rm -rf $(BINDIR)/server/RoomHandler.class $(BINDIR)/server/Room.class
 	@javac $(JFLAGS) $(SRCDIR)/server/RoomHandler.java $(SRCDIR)/server/Room.java
+
+FileSender.class: FileSender.java
+	@rm -rf $(BINDIR)/client/FileSender.class $(BINDIR)/client/Receiver.class $(BINDIR)/client/Sender.class
+	@javac $(JFLAGS) $(SRCDIR)/client/FileSender.java $(SRCDIR)/client/Receiver.java $(SRCDIR)/client/Sender.java
 
 run_server: all
 	@echo "Variables: PORT MAXCLIENTS MAXROOMS"
