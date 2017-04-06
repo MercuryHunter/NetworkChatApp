@@ -32,18 +32,20 @@ public class Room {
 	public String getName() { return name; }
 	public int getNumUsers() { return clients.size(); }
 
-	public Room join(ConnectedClient client) {
+	public synchronized Room join(ConnectedClient client) {
 		clients.add(client);
 		System.out.println("Client " + client.ID + " joined room: " + name);
+		sendMessage("Another user joined the room!", client);
 		return this;
 	}
 
-	public void disconnect(ConnectedClient client) {
+	public synchronized void disconnect(ConnectedClient client) {
 		System.out.println("Client " + client.ID + " left room: " + name);
+		sendMessage("Another user left the room!", client);
 		clients.remove(client);
 	}
 
-	public void sendMessage(String message, ConnectedClient sender) {
+	public synchronized void sendMessage(String message, ConnectedClient sender) {
 		for(ConnectedClient client : clients){
 			if (client != sender) client.sendMessage(message);
 		}

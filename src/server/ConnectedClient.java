@@ -158,7 +158,6 @@ class ConnectedClient implements Runnable {
 			room = newRoom.join(this);
 
 			currentRoom();
-			room.sendMessage("Another user joined the room!", this);
 		}
 		else sendMessage("Room not found!");
 	}
