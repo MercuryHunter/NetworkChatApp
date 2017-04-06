@@ -47,6 +47,7 @@ class RoomHandler {
 	// Add a room if there is space to add
 	public synchronized boolean createRoom(String roomName) {
 		if(rooms.size() >= maxRooms) return false;
+		if(getRoom(roomName)) return false;
 		rooms.add(new Room(roomName));
 		return true;
 	}
