@@ -7,13 +7,15 @@ class RoomHandler {
 	static ArrayList<Room> rooms;
 	static int maxRooms;
 
+	public static final String DEFAULT_ROOM_NAME = "Default";
+
 	public RoomHandler(int maxRooms) {
 		// Initialise list of rooms
 		this.maxRooms = maxRooms;
 		rooms = new ArrayList<Room>(maxRooms);
 
 		// Make default room
-		rooms.add(new Room("Default"));
+		rooms.add(new Room(DEFAULT_ROOM_NAME));
 
 		// TODO: Discover previously created rooms
 	}

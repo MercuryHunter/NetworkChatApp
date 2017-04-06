@@ -21,9 +21,6 @@ class ConnectedClient implements Runnable {
 			IDCounter++;
 		}
 
-		// Join the default room
-		room = Server.roomHandler.getDefaultRoom().join(this);
-
 		// Create access points for input and output
 		try{
 			receive = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -33,7 +30,9 @@ class ConnectedClient implements Runnable {
 			System.err.println("Error creating thing. This is temporary.");
 		}
 
-		sendMessage(roomMessage());
+		// Join the default room
+		//room = Server.roomHandler.getDefaultRoom().join(this);
+		changeRoom(Server.roomHandler.DEFAULT_ROOM_NAME);
 	}
 
 	public void run() {
@@ -57,8 +56,6 @@ class ConnectedClient implements Runnable {
 
 	// Deal with the commands users can send, and provide them with output
 	private void handleCommand(String[] args) {
-		// TODO: List users command.
-		// TODO: Current room command.
 		String baseCommand = args[0].toLowerCase();
 		switch(baseCommand) {
 			case "list":
@@ -75,6 +72,9 @@ class ConnectedClient implements Runnable {
 				break;
 			case "download":
 				downloadFile(args);
+				break;
+			case "currentroom":
+				currentRoom();
 				break;
 			case "createroom":
 				createRoom(args);
@@ -96,7 +96,7 @@ class ConnectedClient implements Runnable {
 	}
 
 	private void help() {
-		String help = "Commands include list, help, send <file>, download <file>,\ncreateroom <name>, changeroom <name>, disconnect\nExperiment with them!";
+		String help = "Commands include list, help,\nlistfiles, send <file>, download <file>,\ncurrentroom, createroom <name>, changeroom <name>, disconnect\nExperiment with them!";
 		sendMessage(help);
 	}
 
@@ -127,6 +127,10 @@ class ConnectedClient implements Runnable {
 		else sendMessage("Sorry, we could not find the file you were looking for.");
 	}
 
+	private void currentRoom() {
+		sendMessage(roomMessage());
+	}
+
 	private void createRoom(String[] args) {
 		if(args.length != 2) {
 			sendMessage("Please provide a room name and no other arguments to the function.");
@@ -144,12 +148,17 @@ class ConnectedClient implements Runnable {
 			return;
 		}
 
-		Room newRoom = Server.roomHandler.getRoom(args[1]);
+		changeRoom(args[1]);
+	}
+
+	private void changeRoom(String name) {
+		Room newRoom = Server.roomHandler.getRoom(name);
 		if(newRoom != null) {
-			room.disconnect(this);
+			if(room != null) room.disconnect(this);
 			room = newRoom.join(this);
 
-			sendMessage(roomMessage());
+			currentRoom();
+			room.sendMessage("Another user joined the room!", this);
 		}
 		else sendMessage("Room not found!");
 	}
@@ -169,7 +178,7 @@ class ConnectedClient implements Runnable {
 		if(room.getNumUsers() <= 1) userString = "user";
 		else userString = "users";
 	
-		String output = String.format("You have been connected to room: %s (%d %s)", room.getName(), room.getNumUsers(), userString);
+		String output = String.format("You are in room: %s (%d %s)", room.getName(), room.getNumUsers(), userString);
 		return output;
 	}
 
