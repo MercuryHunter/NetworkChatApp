@@ -134,8 +134,13 @@ class FileHandler {
 
 	// This is from the perspective of a client *sending* a file
 	public synchronized void sendFile(ConnectedClient client, String fileName) {
-		// TODO: Update file list.
 		try {
+			File file = new File(fileName);
+			if(hasFile(file.getName())) {
+				client.sendMessage("That file already exists on the server.");
+				return;
+			}
+
 			System.out.println("Beginning file receive from client.");
 
 			// Instruct client to open data connection and make use of it
@@ -143,9 +148,9 @@ class FileHandler {
 			Socket dataSocket = createDataConnection(port);
 
 			// Open compressed stream and stream to file output
-			File file = new File(fileName);
+			File newFile = new File(getFolderLocation() + "/" + file.getName());
 			GZIPInputStream input = new GZIPInputStream(dataSocket.getInputStream());
-			BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(getFolderLocation() + "/" + file.getName()));//, fileSize);
+			BufferedOutputStream fileOutput = new BufferedOutputStream(new FileOutputStream(newFile));//, fileSize);
 			
 			// Read data into buffer and write to file
 			byte[] buffer = new byte[1024];
@@ -160,7 +165,8 @@ class FileHandler {
 			fileOutput.close();
 			dataSocket.close();
 
-			files.add(file);
+			files.add(newFile);
+			Server.roomHandler.getRoom(roomName).sendMessage(String.format("The file %s was uploaded to the room", file.getName()), null);
 
 			System.out.printf("File \"%s\" downloaded to %s.\n", file.getName(), roomName); // TODO: File size displayed? 
 		}
