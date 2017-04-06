@@ -27,6 +27,13 @@ public class FileSender implements Runnable {
 			// Open data connection to server
 			Socket dataSocket = new Socket(host, port);
 
+			// Check if file should actually be sent
+			if(!Sender.filesToBeSent.contains(file)) {
+				System.err.println("Server requested a file that shouldn't be sent!");
+				dataSocket.close();
+				return;
+			}
+
 			// Open compressed stream output
 			GZIPOutputStream output = new GZIPOutputStream(dataSocket.getOutputStream());
 

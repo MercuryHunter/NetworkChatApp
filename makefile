@@ -14,8 +14,8 @@ MAXROOMS = 10
 
 OBJECTS=ConnectedClient.class FileHandler.class Connector.class \
 		Room.class RoomHandler.class Server.class \
-		FileSender.class FileReceiver.class \
-		Receiver.class Sender.class Client.class
+		FileReceiver.class Receiver.class \
+		Sender.class FileSender.class Client.class
 
 vpath %.java $(SRCDIR):$(SRCDIR)/client:$(SRCDIR)/server
 vpath %.class $(BINDIR):$(BINDIR)/client:$(BINDIR)/server

@@ -2,8 +2,12 @@ package client;
 
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
 public class Sender implements Runnable {
+
+	// Store the files that should be sent, to ensure safety when server requests
+	public static ArrayList<File> filesToBeSent;
 
 	PrintWriter send;
 	String name;
@@ -11,6 +15,8 @@ public class Sender implements Runnable {
 	public Sender(PrintWriter send, String name) {
 		this.send = send;
 		this.name = name;
+
+		filesToBeSent = new ArrayList<File>();
 	}
 
 	public void run() {
@@ -57,6 +63,7 @@ public class Sender implements Runnable {
 					System.out.println("That file doesn't exist!");
 					return;
 				}
+				filesToBeSent.add(file);
 			}
 		}
 
