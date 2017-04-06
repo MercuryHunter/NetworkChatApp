@@ -56,7 +56,7 @@ class FileHandler {
 		String list = "------- Start of file list -------\n";
 
 		for(File file : files)
-			list = list + file.getName() + "\n";
+			list = list + file.getName() + " (" + (int)file.length() + " bytes)\n";
 
 		list = list + "-------- End of file list --------";
 
