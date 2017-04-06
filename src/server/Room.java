@@ -30,6 +30,7 @@ public class Room {
 	}
 
 	public String getName() { return name; }
+	public int getNumUsers() { return clients.size(); }
 
 	public Room join(ConnectedClient client) {
 		clients.add(client);

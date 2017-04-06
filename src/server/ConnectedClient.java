@@ -33,7 +33,7 @@ class ConnectedClient implements Runnable {
 			System.err.println("Error creating thing. This is temporary.");
 		}
 
-		// TODO: Display room + users
+		sendMessage(roomMessage());
 	}
 
 	public void run() {
@@ -143,9 +143,15 @@ class ConnectedClient implements Runnable {
 			sendMessage("Please provide a room name and no other arguments to the function.");
 			return;
 		}
+
 		Room newRoom = Server.roomHandler.getRoom(args[1]);
-		room.disconnect(this);
-		room = newRoom.join(this);
+		if(newRoom != null) {
+			room.disconnect(this);
+			room = newRoom.join(this);
+
+			sendMessage(roomMessage());
+		}
+		else sendMessage("Room not found!");
 	}
 
 	// TODO: Have client kill their own threads on disconnect on client side
@@ -156,6 +162,15 @@ class ConnectedClient implements Runnable {
 
 	public void sendMessage(String message) {
 		send.println(message);
+	}
+
+	private String roomMessage() {
+		String userString;
+		if(room.getNumUsers() <= 1) userString = "user";
+		else userString = "users";
+	
+		String output = String.format("You have been connected to room: %s (%d %s)", room.getName(), room.getNumUsers(), userString);
+		return output;
 	}
 
 }
